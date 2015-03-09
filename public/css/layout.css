@@ -1,0 +1,64 @@
+@import url(//fonts.googleapis.com/css?family=Lato:700);
+
+body {
+	margin: 0;
+	font-family: 'Lato', sans-serif;
+	text-align: center;
+	color: #999;
+}
+
+a, a:visited {
+	text-decoration: none;
+}
+
+h1 {
+	font-size: 32px;
+	margin: 16px 0 0 0;
+}
+
+ol, ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px !important;
+}
+li {
+	
+}
+
+.main-banner {
+	max-height: 150px;
+}
+.main-banner .carousel-inner .item img {
+	width: 100%;
+	max-height: 150px;
+}
+.main-menu {
+	text-align: center;
+	margin: auto;
+	height: 43px;
+	background: #eee;
+}
+.main-menu ul {
+	
+}
+.main-menu ul li {
+	display: inline;
+	float: left;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+.main-container {
+	min-width: 300px;
+	min-height: 200px;
+}
+.main-footer {
+	background: green;
+}
+
+.map-container {
+	width: 580px;
+	height: 440px;
+	text-align: center;
+	margin: auto;
+}
