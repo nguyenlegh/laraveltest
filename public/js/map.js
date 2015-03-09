@@ -6,9 +6,6 @@ jQuery(document)
 				function($) {
 					var locationPicker = new LocationPicker();
 					// init map
-					//if (locationPicker) {
-					//	locationPicker.initialize();
-					//}
 					$('#location-picker').on('shown.bs.modal', function(e) {
 						if (!locationPicker.isInitialize) {
 							console.log('hererere');
