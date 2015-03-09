@@ -2,7 +2,7 @@ var LocationPicker = function(options) {
 	this.options = $.extend({}, options);
 	this.init(this.options);
 	this.places = '';
-	this.locationAddress = '';
+	this.isInitialize = false;
 };
 
 LocationPicker.prototype.init = function(options) {
@@ -10,16 +10,18 @@ LocationPicker.prototype.init = function(options) {
 };
 
 LocationPicker.prototype.initEvents = function() {
+	var _self = this;
 	console.log('LocationPicker initEvents');
 	$('#map-btn-ok').on('click', function(evt) {
 		console.log('DOne select location');
-		console.log(this.places);
+		$('#location-picker').modal('hide');
 	});
 };
 
 LocationPicker.prototype.initialize = function() {
 	var _self = this;
 	console.log('location initialie');
+	_self.isInitialize = true;
 	this.defaultLocation = new google.maps.LatLng(16.0466742, 108.206706);
 	var mapOptions = {
 		zoom : 12,
@@ -30,7 +32,6 @@ LocationPicker.prototype.initialize = function() {
 	// the map object
 	this.map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
-
 	// the marker object to draw on the map
 	this.marker = new google.maps.Marker({
 		position : this.defaultLocation,
@@ -40,7 +41,6 @@ LocationPicker.prototype.initialize = function() {
 
 	// Create the search box and link it to the UI element.
 	this.input = (document.getElementById('pac-input'));
-	/** @type {HTMLInputElement} */
 	this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.input);
 
 	this.searchBox = new google.maps.places.SearchBox((this.input));
@@ -107,6 +107,7 @@ LocationPicker.prototype.updateDataAfterDrag = function(location) {
 	}, function(responses) {
 		if (responses && responses.length > 0) {
 			// process data here
+			console.log('drag here');
 			_self.places = responses[0];
 			_self.input.value = responses[0].formatted_address
 		} else {
@@ -123,4 +124,10 @@ LocationPicker.prototype.getSelectedLocation = function() {
 	} else {
 		return null;
 	}
+};
+
+LocationPicker.prototype.reset = function() {
+	this.map = null;
+	this.searchBox = null;
+	this.input = null;
 };
