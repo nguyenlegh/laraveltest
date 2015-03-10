@@ -14,7 +14,7 @@
 Route::get('/', 'HomeController@showWelcome');
 Route::get('/map', 'MapController@indexAction');
 Route::get('/upload-demo', 'UploadDemoController@indexAction');
-Route::post('/upload', 'UploadDemoController@uploadAction');
+Route::any('/upload', 'UploadDemoController@uploadAction');
 
 Route::any('/hello/{name?}', function($name = 'Nguyen')
 {
