@@ -30,6 +30,7 @@
     {{ HTML::script('js/upload-component.js') }}
     {{ HTML::script('js/location-picker.js') }}
     {{ HTML::script('js/category-select.js') }}
+    {{ HTML::script('js/map-view.js') }}
     {{ HTML::script('js/question-input.js') }}
 @stop 
 
@@ -60,8 +61,16 @@
                 </div>
                 <div class="modal-footer">
                     <div class="qi-attach">
-                        <button class="btn btn-default"><span class="glyphicon glyphicon-picture"></span></button>
-                        <button class="btn btn-default"><span class="glyphicon glyphicon-facetime-video"></span></button>
+                        <button class="qi-attach-image-btn btn btn-default">
+                            <span class="glyphicon glyphicon-picture">
+                                <input type="file" name="files[]" multiple>
+                            </span>
+                        </button>
+                        <button class="qi-attach-video-btn btn btn-default">
+                            <span class="glyphicon glyphicon-facetime-video">
+                                <input type="file" name="files[]">
+                            </span>
+                        </button>
                         <button class="btn btn-default qi-location-picker-btn"><span class="glyphicon glyphicon-map-marker"></span></button>
                         <button class="btn btn-default qi-select-category-btn">Category</button>    
                     </div>
@@ -83,11 +92,13 @@
                 <div class="modal-body">
                     <p class="qi-confirm-qt"></p>
                     <textarea class="qi-confirm-content form-control" rows="3" disabled></textarea>
-
+                    <div class="qi-confirm-map-view" >
+                        <div id="map-view-canvas" style="width: 390px; height:250px;"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Edit</button>
-                    <button type="button" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-primary qi-confirm-add-btn">Add</button>
                     <button type="button" class="btn btn-default">Translate</button>
                     <button type="button" class="btn btn-default">Input guideline</button>
                 </div>
@@ -141,7 +152,6 @@
     </div>
 
     <!-- Location picker dialog -->
-    <!-- Location dialog -->
     <div id="location-picker-modal" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -160,6 +170,11 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <!-- Map view -->
+    <div class="modal map-view-container">
+        <div id="map-view-canvassss"></div>
+    </div>
 </div>
 
 <!-- The template to display files available for upload -->

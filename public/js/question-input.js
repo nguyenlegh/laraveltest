@@ -31,6 +31,7 @@ var QuestionInput = function(options) {
 QuestionInput.prototype.init = function(options) {
     this.locationPicker = new LocationPicker(this);
     this.categoryModal = new Category(this);
+    this.mapView = new MapView(this);
     this.getAllQuestionTemplates();
     this.initEvents();
 };
@@ -43,11 +44,15 @@ QuestionInput.prototype.initEvents = function() {
     });
     // init event for select question template
     _self.qiView.find(".qi-question-templates select").change(function() {
-        _self.questionTemplate.id = $(this).find("option:selected").val();
-        _self.questionTemplate.content = $(this).find("option:selected").text();
+        if ($(this).find("option:selected").val() > 0) {
+            _self.questionTemplate.id = $(this).find("option:selected").val();
+            _self.questionTemplate.content = $(this).find("option:selected").text();
+        } else {
+            _self.questionTemplate = {};
+        }
     });
     // show category here
-    _self.qiView.find('.qi-select-category-btn').on('click', function(evt) {
+    _self.qiConfirmView.find('.qi-confirm-add-btn').on('click', function(evt) {
         console.log('select category');
         _self.content = 'test here';
         _self.showSelectCategory();
@@ -56,6 +61,19 @@ QuestionInput.prototype.initEvents = function() {
     _self.qiView.find('.qi-location-picker-btn').on('click', function(evt) {
         console.log('Location picker');
         _self.showLocationPicker();
+    });
+    // show map view
+    this.qiConfirmView.on('shown.bs.modal', function(e) {
+        if (!_self.mapView.isInitialize) {
+            _self.mapView.initMapView();
+            // we will show data here because of map don't show complete
+            if (_self.location && _self.location.lat && _self.location.lng) {
+                _self.qiConfirmView.find('.qi-confirm-map-view').show();
+                _self.mapView.panMapTo(_self.location);
+            } else {
+                _self.qiConfirmView.find('.qi-confirm-map-view').hide();
+            }
+        }
     });
 };
 QuestionInput.prototype.getAllQuestionTemplates = function() {
@@ -79,23 +97,33 @@ QuestionInput.prototype.renderQuestionTemplates = function(dataRender) {
 };
 QuestionInput.prototype.processConfirmData = function() {
     var _self = this;
+    // question template
     if (_self.questionTemplate && _self.questionTemplate.content) {
         _self.qiConfirmView.find('.qi-confirm-qt').show();
         _self.qiConfirmView.find('.qi-confirm-qt').html(_self.questionTemplate.content);
     } else {
         _self.qiConfirmView.find('.qi-confirm-qt').hide();
     }
+    // content
     if (_self.content) {
         _self.qiConfirmView.find('.qi-confirm-content').show();
         _self.qiConfirmView.find('.qi-confirm-content').val(_self.content);
     } else {
         _self.qiConfirmView.find('.qi-confirm-content').hide();
     }
+    // map view
+    /*if (_self.location && _self.location.lat && _self.location.lng) {
+        _self.qiConfirmView.find('.qi-confirm-map-view').show();
+        console.log(_self.location);
+        _self.mapView.panMapTo(_self.location);
+    } else {
+        _self.qiConfirmView.find('.qi-confirm-map-view').hide();
+    }*/
 };
 QuestionInput.prototype.showConfirm = function() {
     if (this.qiConfirmView) {
-        this.processConfirmData();
         this.qiConfirmView.modal('show');
+        this.processConfirmData();
     }
 };
 QuestionInput.prototype.showSelectCategory = function() {
@@ -111,24 +139,26 @@ QuestionInput.prototype.showTranslateDialog = function() {
 QuestionInput.prototype.showLocationPicker = function() {
     var _self = this;
     this.locationPicker.getView().modal('show');
+    this.locationPicker.getView().unbind('shown.bs.modal');
     this.locationPicker.getView().on('shown.bs.modal', function(e) {
         if (!_self.locationPicker.isInitialize) {
             _self.locationPicker.initialize();
         }
     });
+    this.locationPicker.getView().unbind('hidden.bs.modal');
     this.locationPicker.getView().on('hidden.bs.modal', function(e) {
         if (_self.locationPicker) {
             _self.locationPicker.reset();
         }
     });
-}
+};
 QuestionInput.prototype.setLocation = function(location) {
     var _self = this;
     console.log('qi location');
     console.log(location);
     if (location) {
-        _self.location.lat = location.geometry.location.D;
-        _self.location.lng = location.geometry.location.k;
+        _self.location.lat = location.geometry.location.k;
+        _self.location.lng = location.geometry.location.D;
         _self.location.address = location.formatted_address;
     }
     console.log(_self.location);

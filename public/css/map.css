@@ -12,6 +12,12 @@
 	margin: 0px;
 	padding: 0px
 }
+#map-view-canvas {
+	height: 250px;
+	width: 390px;
+	margin: 0px;
+	padding: 0px
+}
 
 .controls {
 	margin-top: 16px;
