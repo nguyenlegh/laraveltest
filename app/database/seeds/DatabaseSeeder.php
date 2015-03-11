@@ -11,7 +11,9 @@ class DatabaseSeeder extends Seeder {
 	{
 		Eloquent::unguard();
 
-		$this->call('PostCommentSeeder');
+		//$this->call('PostCommentSeeder');
+		//$this->call('QuestionTemplatesSeeder');
+		$this->call('CategoriesSeeder');
 	}
 
 }

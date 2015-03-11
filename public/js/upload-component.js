@@ -1,100 +1,29 @@
 /**
  * This is upload.js
  */
-jQuery(document).ready(function($) {
-    console.log('ready');
-    //UploadManager.init();
-    'use strict';
-    // Initialize the jQuery File Upload widget:
-    $('#fileupload').fileupload({
-        // Uncomment the following to send cross-domain cookies:
-        //xhrFields: {withCredentials: true},
-        url: '/upload',
-        dataType: 'json',
-        autoUpload: false,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png|avi|mp4|mkv|mov)$/i,
-        maxFileSize: 100000000, // 100 MB
-        disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-        previewMaxWidth: 100,
-        previewMaxHeight: 100,
-        previewCrop: true
-    }).on('fileuploadadd', function(e, data) {
-    	console.log('uploadAdd');
-        console.log(data);
-    }).on('fileuploaddone', function(e, data) {
-        console.log('upload done');
-        console.log(data);
-        if (data.result.status == 'success') {
-        	console.log(data.response.result);
-            
-        } else {
-            $.each(data.files, function(index, file) {
-                var error = $('<span class="text-danger"/>').text(file.message);
-                $(data.context.children()[index]).append('<br>').append(error);
-            });
-        }
-    });
-    // Enable iframe cross-domain access via redirect option:
-    $('#fileupload').fileupload('option', 'redirect', window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s'));
-    // Load existing files:
-    $('#fileupload').addClass('fileupload-processing');
-    $.ajax({
-        // Uncomment the following to send cross-domain cookies:
-        //xhrFields: {withCredentials: true},
-        url: $('#fileupload').fileupload('option', 'url'),
-        dataType: 'json',
-        context: $('#fileupload')[0]
-    }).always(function() {
-        $(this).removeClass('fileupload-processing');
-    }).done(function(result) {
-        $(this).fileupload('option', 'done').call(this, $.Event('done'), {
-            result: result
-        });
-    });
-});
 var UploadManager = function(options) {
     this.options = $.extend({}, options);
     this.uploadFileURL = '/upload';
     this.init(this.options);
 };
-UploadManager.prototype.init = function(options) {
+UploadManager.prototype.init = function() {
     var _self = this;
     _self.initEvents();
 };
 UploadManager.prototype.initEvents = function() {
     var _self = this;
-    $('#add-product-form').submit(function(evt) {
-        // save product
-        _self.addProduct(evt, $(this));
-        return false;
-    });
-    _self.initFileUpload();
+    _self.initVideoUpload();
 };
 UploadManager.prototype.initVideoUpload = function() {
     var _self = this;
-    var url = _self.uploadProductURL;
-    var uploadButton = $('<button/>').addClass('btn btn-primary').prop('disabled', true).text('Processing...').on('click', function() {
-        var $this = $(this),
-            data = $this.data();
-        $this.off('click').text('Abort').on('click', function() {
-            $this.remove();
-            data.abort();
-        });
-        data.submit().always(function() {
-            $this.remove();
-        });
-    });
-    $('#fileupload').fileupload({
-        url: url,
+    $('#video-fileupload').fileupload({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+        url: _self.uploadFileURL,
         dataType: 'json',
         autoUpload: false,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-        maxFileSize: 5000000, // 5 MB
-        // Enable image resizing, except for Android and
-        // Opera,
-        // which actually support image resizing, but fail
-        // to
-        // send Blob objects via XHR requests:
+        acceptFileTypes: /(\.|\/)(avi|mp4|mkv|mov)$/i,
+        maxFileSize: 100000000, // 100 MB
         disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
         previewMaxWidth: 100,
         previewMaxHeight: 100,
@@ -151,7 +80,6 @@ UploadManager.prototype.initVideoUpload = function() {
         });
     }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
 };
-
 UploadManager.prototype.initImagesUpload = function() {
     var _self = this;
     var url = _self.uploadProductURL;
@@ -233,14 +161,8 @@ UploadManager.prototype.initImagesUpload = function() {
         });
     }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
 };
-
-UploadManager.prototype.uploadImages = function() {
-
-};
-
-UploadManager.prototype.uploadVideo = function() {
-
-};
+UploadManager.prototype.uploadImages = function() {};
+UploadManager.prototype.uploadVideo = function() {};
 UploadManager.prototype.addProduct = function() {
     var _self = this;
     if (_self.validateBeforeSave(form)) {

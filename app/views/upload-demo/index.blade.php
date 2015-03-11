@@ -13,7 +13,7 @@
 @section('js') 
 	@parent 
 	{{ HTML::script('vendor/jquery-ui/jquery.ui.widget.js') }}
-	{{ HTML::script('vendor/jquery-tmpl.min.js') }} 
+	{{ HTML::script('vendor/jquery-file-upload/tmpl.min.js') }}
 	{{ HTML::script('vendor/jquery-iframe-transport/jquery.iframe-transport.js') }} 
 	{{ HTML::script('vendor/jquery-file-upload/js/load-image.all.min.js') }} 
 	{{ HTML::script('vendor/jquery-file-upload/js/canvas-to-blob.min.js') }} 

@@ -55,7 +55,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'testlara',
+			'database'  => 'ometanashi',
 			'username'  => 'asiantech',
 			'password'  => 'asian123',
 			'charset'   => 'utf8',

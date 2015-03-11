@@ -1,8 +1,8 @@
-#location-picker {
+#location-picker-modal {
 	
 }
 
-#location-picker .modal-dialog .modal-body {
+#location-picker-modal .modal-dialog .modal-body {
 	padding: 5px;
 }
 
@@ -57,15 +57,9 @@
 
 .pac-container {
     background-color: #FFF;
-    z-index: 20;
+    z-index: 10000;
     position: fixed;
     display: inline-block;
     float: left;
     font-family: Roboto;
 }
-.modal{
-    z-index: 20;   
-}
-.modal-backdrop{
-    z-index: -30;        
-}​
