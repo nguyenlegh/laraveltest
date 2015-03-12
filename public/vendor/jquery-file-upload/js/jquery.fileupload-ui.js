@@ -579,6 +579,7 @@
                 click: function (e) {
                     e.preventDefault();
                     filesList.find('.cancel').click();
+                    console.log('cancel');
                 }
             });
             this._on(fileUploadButtonBar.find('.delete'), {
@@ -659,7 +660,12 @@
         _initFilesContainer: function () {
             var options = this.options;
             if (options.filesContainer === undefined) {
-                options.filesContainer = this.element.find('.files');
+                var listPreview = $('.files');
+                if (this.element.find('.files').length) {
+                    //options.filesContainer = $('.files');
+                    listPreview = this.element.find('.files');
+                }
+                options.filesContainer = listPreview;
             } else if (!(options.filesContainer instanceof $)) {
                 options.filesContainer = $(options.filesContainer);
             }

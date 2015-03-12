@@ -8,7 +8,6 @@ var LocationPicker = function(delegate, options) {
     }
 
     this.places = '';
-    console.log(this.options);
     this.containerView = $('#location-picker-modal');
     this.isInitialize = false;
     this.init(this.options);

@@ -10,7 +10,7 @@ var QuestionInput = function(options) {
     this.userId = '';
     this.category = {
         id: 0,
-        name: ''
+        title: ''
     };
     this.questionTemplate = {};
     this.content = '';
@@ -21,6 +21,8 @@ var QuestionInput = function(options) {
         address: ''
     };
     this.mediaList = [];
+    this.imageCount = 0;
+    this.videoCount = 0;
     this.isImageQuestion = false;
     this.qiView = $('#questionInputModal');
     this.qiConfirmView = $('#qi-confirm-modal');
@@ -32,6 +34,7 @@ QuestionInput.prototype.init = function(options) {
     this.locationPicker = new LocationPicker(this);
     this.categoryModal = new Category(this);
     this.mapView = new MapView(this);
+    this.uploadManager = new UploadManager(this);
     this.getAllQuestionTemplates();
     this.initEvents();
 };
@@ -51,10 +54,9 @@ QuestionInput.prototype.initEvents = function() {
             _self.questionTemplate = {};
         }
     });
-    // show category here
+    // confirm add button
     _self.qiConfirmView.find('.qi-confirm-add-btn').on('click', function(evt) {
-        console.log('select category');
-        _self.content = 'test here';
+        //_self.qiConfirmView.modal('hide');
         _self.showSelectCategory();
     });
     // show location picker
@@ -62,7 +64,7 @@ QuestionInput.prototype.initEvents = function() {
         console.log('Location picker');
         _self.showLocationPicker();
     });
-    // show map view
+    // show map view on confirm
     this.qiConfirmView.on('shown.bs.modal', function(e) {
         if (!_self.mapView.isInitialize) {
             _self.mapView.initMapView();
@@ -74,6 +76,10 @@ QuestionInput.prototype.initEvents = function() {
                 _self.qiConfirmView.find('.qi-confirm-map-view').hide();
             }
         }
+    });
+    // preview
+    this.qiConfirmView.on('hide.bs.modal', function(e) {
+        _self.qiView.find('.qi-preview').append(_self.qiConfirmView.find('.qi-confirm-preview').children());
     });
 };
 QuestionInput.prototype.getAllQuestionTemplates = function() {
@@ -111,6 +117,13 @@ QuestionInput.prototype.processConfirmData = function() {
     } else {
         _self.qiConfirmView.find('.qi-confirm-content').hide();
     }
+    // attached view
+    if (_self.imageCount || _self.videoCount) {
+        _self.qiConfirmView.find('.qi-confirm-preview').empty().show();
+        _self.qiConfirmView.find('.qi-confirm-preview').append(_self.qiView.find('.qi-attach-preview'));
+    } else {
+        _self.qiConfirmView.find('.qi-confirm-preview').hide();
+    }
     // map view
     /*if (_self.location && _self.location.lat && _self.location.lng) {
         _self.qiConfirmView.find('.qi-confirm-map-view').show();
@@ -119,6 +132,40 @@ QuestionInput.prototype.processConfirmData = function() {
     } else {
         _self.qiConfirmView.find('.qi-confirm-map-view').hide();
     }*/
+};
+QuestionInput.prototype.saveQuestion = function() {
+    var _self = this;
+    $('.question-post-progressbar').css('width', '0%');
+    $('.question-post-progress').show();
+    console.log('saveQuestion');
+    var saveQuestionUrl = '/save-question';
+    $.post(saveQuestionUrl, {
+        data: _self.toJson()
+    }, function(data, status) {
+        console.log(data);
+        var quesPercent = 100/(_self.imageCount + _self.videoCount);
+        $('.question-post-progressbar').css('width', quesPercent + '%');
+        console.log($(".qi-confirm-preview .start"));
+        $(".qi-confirm-preview .start").click();
+        //if (status == 'success' && data.data.length) {
+            //done save question, start upload now
+
+        //}
+    });
+};
+QuestionInput.prototype.toJson = function() {
+    var _self = this;
+    return JSON.stringify({ 'content': _self.content, 
+        'question-template': _self.questionTemplate,
+        'category': _self.category,
+        'location': _self.location,
+        'translate': _self.contentTranslate }); 
+};
+QuestionInput.prototype.updateMedia = function(data) {
+    console.log('updateMedia');
+};
+QuestionInput.prototype.reset = function() {
+    console.log('reset');
 };
 QuestionInput.prototype.showConfirm = function() {
     if (this.qiConfirmView) {
@@ -129,6 +176,7 @@ QuestionInput.prototype.showConfirm = function() {
 QuestionInput.prototype.showSelectCategory = function() {
     if (this.categoryModal) {
         this.categoryModal.getView().modal('show');
+        this.categoryModal.setData(this.content);
     }
 };
 QuestionInput.prototype.showTranslateDialog = function() {
@@ -183,4 +231,7 @@ QuestionInput.prototype.getLocationPicker = function() {
 };
 QuestionInput.prototype.getCategory = function() {
     return this.categoryModal;
+};
+QuestionInput.prototype.incrImageCount = function() {
+    this.imageCount++;
 };

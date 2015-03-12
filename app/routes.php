@@ -18,7 +18,7 @@ Route::any('/upload', 'UploadDemoController@uploadAction');
 Route::any('/question-demo', 'QuestionController@indexAction');
 Route::post('/get-all-question-templates', 'QuestionController@getAllQuestionTemplatesAction');
 Route::post('/get-all-category', 'QuestionController@getAllCategoryAction');
-
+Route::post('/save-question', 'QuestionController@saveQuestionAction');
 
 Route::any('/hello/{name?}', function($name = 'Nguyen')
 {

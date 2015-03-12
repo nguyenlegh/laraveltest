@@ -11,3 +11,11 @@
 .qi-attach .qi-attach-video-btn span {
     cursor: pointer;
 }
+.qi-attach-preview .template-upload {
+    display: inline;
+    float: left;
+}
+.qi-attach-preview .template-upload video {
+    max-width: 100px;
+    max-height: 100px;
+}

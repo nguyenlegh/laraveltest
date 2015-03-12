@@ -22,6 +22,9 @@ Category.prototype.initEvents = function() {
             _self.categoryView.modal('hide');
             // save the current selected category
             _self.delegate.setCategory(_self.category);
+
+            // save question here
+            _self.delegate.saveQuestion();
         }
     });
     // init event for select category
@@ -29,8 +32,6 @@ Category.prototype.initEvents = function() {
         _self.category.id = $(this).find("option:selected").val();
         _self.category.title = $(this).find("option:selected").text();
     });
-    // set data for input
-    _self.categoryView.find(".category-content-input").val(_self.delegate.getQuestionText());
 };
 Category.prototype.getAllCategory = function() {
     var _self = this;
@@ -60,6 +61,10 @@ Category.prototype.isValid = function() {
         return false;
     }
     return true;
+};
+Category.prototype.setData = function(data) {
+    // set data for input
+    this.categoryView.find(".category-content-input").val(data);
 };
 Category.prototype.reset = function() {
     // reset data here

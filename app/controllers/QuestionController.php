@@ -34,4 +34,19 @@ class QuestionController extends BaseController
                 'message' => $ex->getMessage()));
         }
     }
+
+    public function saveQuestionAction() {
+        try {
+            $jsonQuestion = Input::get('data');
+            return Response::json(array('status' => 'success', 
+                'message' => 'Save success', 'data' => $jsonQuestion));
+            //$categories = Categories::all();
+            //return Response::json(array('status' => 'success', 
+            //    'message' => '', 'data' => $categories));
+        }
+        catch(Exception $ex) {
+            return Response::json(array('status' => 'error', 
+                'message' => $ex->getMessage()));
+        }
+    }
 }
