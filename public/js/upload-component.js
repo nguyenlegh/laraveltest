@@ -15,7 +15,9 @@ UploadManager.prototype.init = function() {
 };
 UploadManager.prototype.initEvents = function() {
     var _self = this;
-    
+    $('.files').on('cancel-click', function(){
+        _self.delegate.descrImageCount();
+    });
 };
 UploadManager.prototype.initVideoUpload = function() {
     var _self = this;
@@ -40,6 +42,17 @@ UploadManager.prototype.initImagesUpload = function() {
             // increase the image count
             data.submit();
         });
+        console.log(data);
+
+        //data.context = $('<div/>').appendTo('#files');
+        //$.each(data.files, function(index, file) {
+        //    var node = $('<p/>').append($('<span/>').text(file.name));
+        //    if (!index) {
+        //        node.append('<br>').append(uploadButton.clone(true).data(data));
+        //    }
+        //    node.appendTo(data.context);
+        //});
+
         // cancel event
         //data.context.find(".cancel").on('click', function() {
         //    console.log('cancel');
@@ -48,7 +61,7 @@ UploadManager.prototype.initImagesUpload = function() {
       //$('#fileupload').append(data.context);
       //data.context.find('.cancel').click( abortUpload );
 
-console.log($(".qi-confirm-preview .start"));
+
         _self.delegate.incrImageCount();
         
 
@@ -62,4 +75,9 @@ console.log($(".qi-confirm-preview .start"));
 };
 UploadManager.prototype.getUploadButton = function() {
     return this.uploadButton;
+};
+UploadManager.prototype.setFormData = function(data) {
+    $('#fileupload').fileupload({
+        formData: {type: data.type, id: data.id}
+    });
 };

@@ -27,17 +27,17 @@ LocationPicker.prototype.initEvents = function() {
 LocationPicker.prototype.initialize = function() {
     var _self = this;
     this.isInitialize = true;
-    this.defaultLocation = new google.maps.LatLng(_self.options.location.lat, _self.options.location.lng);
+    var defaultLocation = new google.maps.LatLng(_self.options.location.lat, _self.options.location.lng);
     var mapOptions = {
         zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-        center: this.defaultLocation
+        center: defaultLocation
     };
     // the map object
     this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     // the marker object to draw on the map
     this.marker = new google.maps.Marker({
-        position: this.defaultLocation,
+        position: defaultLocation,
         map: _self.map,
         draggable: true
     });

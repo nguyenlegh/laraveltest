@@ -61,7 +61,6 @@ QuestionInput.prototype.initEvents = function() {
     });
     // show location picker
     _self.qiView.find('.qi-location-picker-btn').on('click', function(evt) {
-        console.log('Location picker');
         _self.showLocationPicker();
     });
     // show map view on confirm
@@ -85,10 +84,7 @@ QuestionInput.prototype.initEvents = function() {
 QuestionInput.prototype.getAllQuestionTemplates = function() {
     var _self = this;
     var getQTurl = '/get-all-question-templates';
-    $.post(getQTurl, {
-        name: "Donald Duck",
-        city: "Duckburg"
-    }, function(data, status) {
+    $.post(getQTurl, {}, function(data, status) {
         if (status == 'success' && data.data.length) {
             _self.renderQuestionTemplates(data.data);
         }
@@ -143,23 +139,27 @@ QuestionInput.prototype.saveQuestion = function() {
         data: _self.toJson()
     }, function(data, status) {
         console.log(data);
-        var quesPercent = 100/(_self.imageCount + _self.videoCount);
+        var quesPercent = 100 / (_self.imageCount + _self.videoCount);
         $('.question-post-progressbar').css('width', quesPercent + '%');
-        console.log($(".qi-confirm-preview .start"));
+        _self.uploadManager.setFormData({
+            'id': data.data.id,
+            'type': 'question'
+        });
         $(".qi-confirm-preview .start").click();
         //if (status == 'success' && data.data.length) {
-            //done save question, start upload now
-
+        //done save question, start upload now
         //}
     });
 };
 QuestionInput.prototype.toJson = function() {
     var _self = this;
-    return JSON.stringify({ 'content': _self.content, 
+    return JSON.stringify({
+        'content': _self.content,
         'question-template': _self.questionTemplate,
         'category': _self.category,
         'location': _self.location,
-        'translate': _self.contentTranslate }); 
+        'translate': _self.contentTranslate
+    });
 };
 QuestionInput.prototype.updateMedia = function(data) {
     console.log('updateMedia');
@@ -202,14 +202,11 @@ QuestionInput.prototype.showLocationPicker = function() {
 };
 QuestionInput.prototype.setLocation = function(location) {
     var _self = this;
-    console.log('qi location');
-    console.log(location);
     if (location) {
         _self.location.lat = location.geometry.location.k;
         _self.location.lng = location.geometry.location.D;
         _self.location.address = location.formatted_address;
     }
-    console.log(_self.location);
 };
 QuestionInput.prototype.setCategory = function(category) {
     if (category) {
@@ -234,4 +231,10 @@ QuestionInput.prototype.getCategory = function() {
 };
 QuestionInput.prototype.incrImageCount = function() {
     this.imageCount++;
+};
+QuestionInput.prototype.descrImageCount = function() {
+    this.imageCount--;
+    if (this.imageCount < 0) {
+        this.imageCount = 0;
+    }
 };

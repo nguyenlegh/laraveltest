@@ -36,6 +36,7 @@ class UploadDemoController extends BaseController
                 throw new \RuntimeException("Could not create target directory to move temporary file into.");
             }
         }
+        var_dump(Input::get('type'));die();
         $fileName = NULL;
         $thumbName = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

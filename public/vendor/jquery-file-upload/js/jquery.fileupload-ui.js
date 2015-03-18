@@ -529,6 +529,10 @@
                 data.errorThrown = 'abort';
                 this._trigger('fail', e, data);
             }
+
+            // trigger event when click cancel
+            console.log(this.options.filesContainer);
+            this.options.filesContainer.trigger('cancel-click');
         },
 
         _deleteHandler: function (e) {
